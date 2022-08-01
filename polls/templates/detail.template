@@ -1,0 +1,8 @@
+<ul> <h2>{{question}}</h2>
+
+{% for choice in choices %}
+    <li>{{choice}}</li><br></br>
+{% endfor %}
+</ul>
+<a href='/polls/vote/{{idd}}'>Vote</a> 
+<a href='/polls/result/{{idd}}'>Result</a>

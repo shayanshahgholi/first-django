@@ -1,0 +1,12 @@
+<h3>{{q_describe}}</h3>
+    <form action="/polls/add_vote/{{q_id}}" method="post">
+        {% csrf_token %}
+        <br>
+        {% for choice in choices %}
+            <input type="radio" name="choice" value={{choice.0}} id={{choice.1}}>
+            <label for={{choice.1}}>{{choice.1}}</label><br>
+            <br>
+        {% endfor %}
+        <br>
+        <input type="submit" value="Vote">
+    </form>

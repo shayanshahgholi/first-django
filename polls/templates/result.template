@@ -1,0 +1,5 @@
+{% for choice in choices %}
+    <br><h4>{{choice.0}} : {{choice.1}}</h4></br><br></br>
+{% endfor %}
+
+<a href={% url 'detail' back_id %}> back </a>
