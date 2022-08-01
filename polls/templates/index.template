@@ -1,3 +1,12 @@
+<head>
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href= {% static '/polls/fav.ico' %}>
+    <style>
+        body {
+          background-image: url({% static 'polls/background.jpg' %});
+        }
+        </style> 
+</head>
 <form action="/polls/main" method="get" id="search">
     <label for="search">Search:</label>
     <input type="text" name="Search" id="Search">
