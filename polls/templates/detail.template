@@ -1,8 +1,8 @@
-<ul> <h2>{{question}}</h2>
+<ul> <h2>{{question.description }}</h2>
 
-{% for choice in choices %}
-    <li>{{choice}}</li><br></br>
+{% for choice in question.choice_set.all %}
+    <li>{{choice.description}}</li><br></br>
 {% endfor %}
 </ul>
-<a href='/polls/vote/{{idd}}'>Vote</a> 
-<a href='/polls/result/{{idd}}'>Result</a>
+<a href='/polls/vote/{{question.id}}'>Vote</a> 
+<a href='/polls/result/{{question.id}}'>Result</a>

@@ -1,4 +1,4 @@
-from random import choices
+from django.views import generic
 from django.http import HttpResponse
 from django.shortcuts import render
 from polls.models import Choice, Question 
@@ -7,59 +7,39 @@ from django.http import Http404
 from django.db.models import F
 from django.http import HttpResponseRedirect
 
-def main_page(request):
-    search_text = request.GET.get('Search' , None)
-    template = loader.get_template('index.template')
+class MainPage(generic.ListView):
+    model = Question
+    template_name = 'index.template'
+    context_object_name = 'questions'
+
+    def get_queryset(self):
+        search_text = self.request.GET.get('Search' , None)
+        questions = []
+        if (search_text == None):
+            query_set = Question.objects.all() [:5]
+            for question in query_set:
+                questions.append((str(question.id),question.description))
+        else:
+            query_set = Question.objects.filter(description__contains = (search_text)) [:5]
+            for question in query_set:
+                questions.append((str(question.id),question.description))
+        return questions
 
 
-    questions = []
-    if (search_text == None):
-        query_set = Question.objects.all() [:5]
-        for question in query_set:
-            questions.append((str(question.id),question.description))
-    else:
-        query_set = Question.objects.filter(description__contains = (search_text)) [:5]
-        for question in query_set:
-            questions.append((str(question.id),question.description))
+class Detail(generic.DetailView):
+    model = Question
+    template_name = 'detail.template'
+    context_object_name = 'question'
 
+class Result(generic.DetailView):
+    model = Choice
+    template_name = 'result.template'
+    content_object_name = 'Choices'
 
-    return HttpResponse(template.render({'questions': questions}, request))
-
-def detail(request, question_id):
-    template = loader.get_template('detail.template')
-    query_set = Question.objects.all()
-
-    for question in query_set:
-        if(question.id == question_id):
-            query_set2 = Choice.objects.filter(question__id = question_id)
-            choices = []
-            for choice in query_set2:
-                choices.append(choice.description)
-            idd = str(question.id)
-            return HttpResponse(template.render({'idd' : idd , 'question': question.description, 'choices': choices}, request))
-    else:
-            response = '404'
-
-    if (response == '404'):
-        raise Http404
-
-def result(request, question_id):
-    template = loader.get_template('result.template')
-    query_set = Question.objects.all()
-
-    for question in query_set:
-        if(question.id == question_id):
-            query_set2 = Choice.objects.filter(question__id = question_id)
-            choices = []
-            for choice in query_set2:
-                choices.append((choice.description, str(choice.number_of_vote)))
-            back_id = question.id
-            return HttpResponse(template.render({'back_id' : back_id , 'choices': choices}, request))
-    else:
-            response = '404'
-
-    if (response == '404'):
-        raise Http404
+    def get_context_data(self, **kwargs) :
+        print(super().get_context_data(**kwargs))
+        q = super().get_context_data(**kwargs)['question']
+        return Choice.objects.filter(question__id = q.id)
 
 
 def vote(request, question_id):

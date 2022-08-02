@@ -4,8 +4,9 @@
     <style>
         body {
           background-image: url({% static 'polls/background.jpg' %});
+          background-size: cover;
         }
-        </style> 
+    </style> 
 </head>
 <form action="/polls/main" method="get" id="search">
     <label for="search">Search:</label>
