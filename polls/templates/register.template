@@ -1,0 +1,5 @@
+<form action="/polls/register_add" method="post" id="search">
+    {% csrf_token%}
+{{form.as_ul}}
+<button type="submit" value='Register'>Register</button>
+</form>
